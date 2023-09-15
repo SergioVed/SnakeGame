@@ -1,0 +1,39 @@
+body{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 300px;
+}
+.grid{
+    height: 200px;
+    width: 200px;
+    border: 1px solid black;
+    display: flex;
+    flex-wrap: wrap;
+    div{
+        height: 20px;
+        width: 20px;
+    }
+}
+.info{
+    display: flex;
+    flex-direction: column;
+text-align: center;
+}
+.scoreDisplay{
+    font-size: 20px;
+}
+.snake{
+    background-color: blue;
+}
+.snake_head{
+    background-color: greenyellow;
+}
+.apple{
+    background-color: red;
+}
+#timer{
+    height: 50px;
+    width: 100px;
+    font-size: 20px;
+}
