@@ -33,6 +33,8 @@ function startGame() {
     currentIndex = 0;
     currentSnake.forEach((index) => squares[index].classList.add("snake"));
     interval = setInterval(moveOutcome, intervalTime)
+    score = 0
+    alert("u need to get 3 score")
   }
 function gameBoard() {
     for (let i = 0; i < 100; i++) {
@@ -71,6 +73,9 @@ function moveOutcome() {
     if (checkForHits(squares)) {
         alert("you hit something");
         return clearInterval(interval);
+    }    
+    else if(score === 3){
+      nextLevel();
     }
     else{
         moveSnake(squares)
@@ -102,7 +107,7 @@ function checkForHits(squares) {
   }
  timer = document.getElementById("timer")
  const start = new Date()
- start.setSeconds(start.getSeconds() + 15)
+ start.setSeconds(start.getSeconds() + 60)
  function updateTimer(){
     const currentTime = new Date()
     const timeDiff = new Date(start - currentTime)
@@ -112,19 +117,27 @@ function checkForHits(squares) {
     timer.innerText = `${minutes.toString().padStart(2, "0")} : ${seconds.toString().padStart(2, "0")}`
     if (timeDiff<=0) {
         clearInterval(interval)
-        ask()
+        retry()
     }
  }
  updateTimer()
  interval = setInterval(updateTimer, intervalTime)
 
-function ask(){
-    let nextLevel = confirm("Do u want to go on the next level?")
-    if (nextLevel) {
-        start.setSeconds(start.getSeconds() + 10)
+function retry(){
+    let retry = confirm("u need to get 3 score. Try again")
+    if (retry) {
         startGame()
         gameBoard()
-    } else {
-        alert("Okay, mayve next time")
-    }
+    }     
+}
+function nextLevel(){
+  let nextLevel = confirm("U won, wanna go to the next level?")
+  if (nextLevel) {
+    start.setSeconds(start.getSeconds() + 50)
+    startGame()
+    gameBoard()
+    score = 0
+  } else {
+    alert("Okay maybe next time")
+  }
 }
