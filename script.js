@@ -38,7 +38,7 @@ class CurrentGame {
     timer.innerText = `${minutes.toString().padStart(2, "0")} : ${seconds.toString().padStart(2, "0")}`
     if (timeDiff<=0) {
         clearInterval(this.interval)
-        retry()
+        this.retry()
     }
   }
   startGame() {
@@ -50,8 +50,8 @@ class CurrentGame {
     this.currentSnake = [2, 1, 0];
     currentIndex = 0;
     this.currentSnake.forEach((index) => squares[index].classList.add("snake"));
-    this.interval = setInterval(this.moveOutcome(squares), this.intervalTime);
-    this.interval = setInterval(this.updateTimer(), this.intervalTime)
+    this.interval = setInterval(() => this.moveOutcome(squares), this.intervalTime)
+    this.interval = setInterval(() => this.updateTimer(), this.intervalTime)
     this.score = 0;
     alert("You need to get 3 score");
   }
