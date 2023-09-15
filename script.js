@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 let timer = document.getElementById("timer")
 let start = new Date
-start.setSeconds(start.getSeconds() + 60)
+start.setSeconds(start.getSeconds() + 50)
 
 class CurrentGame {
   constructor() {
@@ -36,11 +36,12 @@ class CurrentGame {
     const seconds = timeDiff.getSeconds()
     this.intervalTime = 1000;
     timer.innerText = `${minutes.toString().padStart(2, "0")} : ${seconds.toString().padStart(2, "0")}`
-    if (timeDiff<=0) {
-        clearInterval(this.interval)
-        this.retry()
+    if (timeDiff <= 0) {
+        clearInterval(this.interval);
+        this.retry();
     }
   }
+  
   startGame() {
     let squares = document.querySelectorAll(".grid div");
     this.randomApple(squares);
@@ -50,8 +51,10 @@ class CurrentGame {
     this.currentSnake = [2, 1, 0];
     currentIndex = 0;
     this.currentSnake.forEach((index) => squares[index].classList.add("snake"));
-    this.interval = setInterval(() => this.moveOutcome(squares), this.intervalTime)
-    this.interval = setInterval(() => this.updateTimer(), this.intervalTime)
+    this.interval = setInterval(() => {
+      this.moveOutcome(squares)
+      this.updateTimer()
+    }, this.intervalTime)
     this.score = 0;
     alert("You need to get 3 score");
   }
@@ -78,8 +81,6 @@ class CurrentGame {
       this.randomApple(squares);
       this.score++;
       scoreDisplay.textContent = this.score;
-      clearInterval(this.interval);
-      this.interval = setInterval(this.moveOutcome.bind(this, squares), this.intervalTime);
     }
   }
 
@@ -128,12 +129,13 @@ class CurrentGame {
     }
   }
 
-
   retry() {
     let retry = confirm("You need to get 3 score. Try again");
     if (retry) {
+      this.clearBoard();
       this.startGame();
       this.gameBoard();
+      clearInterval(this.interval)
     }
   }
 
@@ -145,14 +147,16 @@ class CurrentGame {
     });
     squares[this.appleIndex].classList.remove("apple");
     this.appleIndex = -1;
-    clearInterval(this.interval);
   }
 
   nextLevel() {
     let nextLevel = confirm("You won, wanna go to the next level?");
     if (nextLevel) {
+      clearInterval(this.interval)
+      start.setSeconds(start.getSeconds() + 50)
       this.clearBoard();
       this.startGame();
+      this.score = 0;
     } else {
       alert("Okay maybe next time");
     }
