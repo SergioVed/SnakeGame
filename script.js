@@ -1,143 +1,160 @@
+class Snake {
+  constructor() {
+    this.currentSnake = [2, 1, 0];
+  }
+}
+
 let grid = document.querySelector(".grid");
-let popup = document.querySelector(".popup");
-let playAgain = document.querySelector(".playAgain");
 let scoreDisplay = document.querySelector(".scoreDisplay");
-let left = document.querySelector(".left");
-let bottom = document.querySelector(".bottom");
-let right = document.querySelector(".right");
-let up = document.querySelector(".top");
 let width = 10;
 let currentIndex = 0;
-let appleIndex = 0;
-let currentSnake = [2, 1, 0];
-let direction = 1;
-let score = 0;
-let speed = 0.8;
-let intervalTime = 0;
-let interval = 0;
-function clearBoard(){
-
-}
+let interval = 0
 document.addEventListener("DOMContentLoaded", function () {
-    document.addEventListener("keyup", control);
-    gameBoard();
-    startGame();
-  });
-function startGame() {
-    let squares = document.querySelectorAll(".grid div");
-    randomApple(squares)
-    direction = 1;
-    scoreDisplay.innerHTML = "Score : " + score;
-    intervalTime = 1000;
-    currentSnake = [2, 1, 0];
-    currentIndex = 0;
-    currentSnake.forEach((index) => squares[index].classList.add("snake"));
-    interval = setInterval(moveOutcome, intervalTime)
-    score = 0
-    alert("u need to get 3 score")
-  }
-function gameBoard() {
-    for (let i = 0; i < 100; i++) {
-        let div = document.createElement("div")
-        grid.appendChild(div)
-    }
-}
+  let snakeGame = new CurrentGame();
+  document.addEventListener("keyup", snakeGame.control.bind(snakeGame));
+  snakeGame.gameBoard();
+  snakeGame.startGame();
+});
 
-function randomApple(squares) {
-    do {
-      appleIndex = Math.floor(Math.random() * squares.length);
-    } while (squares[appleIndex].classList.contains("snake"));
-    squares[appleIndex].classList.add("apple");
+let timer = document.getElementById("timer")
+let start = new Date
+start.setSeconds(start.getSeconds() + 60)
+
+class CurrentGame {
+  constructor() {
+    this.score = 0;
+    this.direction = 1;
+    this.intervalTime = 0;
+    this.interval = 0;
+    this.appleIndex = 0;
   }
-  function eatApple(squares, tail) {
-    if (squares[currentSnake[0]].classList.contains("apple")) {
-      squares[currentSnake[0]].classList.remove("apple");
-      squares[tail].classList.add("snake");
-      currentSnake.push(tail);
-      randomApple(squares);
-      score++;
-      scoreDisplay.textContent = score;
-      clearInterval(interval);
-      interval = setInterval(moveOutcome, intervalTime);
+
+  updateTimer(){
+    const currentTime = new Date()
+    const timeDiff = new Date(start - currentTime)
+    const minutes = timeDiff.getMinutes();
+    const seconds = timeDiff.getSeconds()
+    this.intervalTime = 1000;
+    timer.innerText = `${minutes.toString().padStart(2, "0")} : ${seconds.toString().padStart(2, "0")}`
+    if (timeDiff<=0) {
+        clearInterval(this.interval)
+        retry()
     }
   }
-function moveSnake(squares) {
-    let tail = currentSnake.pop();
-    squares[tail].classList.remove("snake")
-    currentSnake.unshift(currentSnake[0] + direction)
-    squares[currentSnake[0]].classList.add("snake")
-    eatApple(squares, tail);
-}
-function moveOutcome() {
+  startGame() {
     let squares = document.querySelectorAll(".grid div");
-    if (checkForHits(squares)) {
-        alert("you hit something");
-        return clearInterval(interval);
-    }    
-    else if(score === 3){
-      nextLevel();
+    this.randomApple(squares);
+    this.direction = 1;
+    scoreDisplay.innerHTML = "Score : " + this.score;
+    this.intervalTime = 1000;
+    this.currentSnake = [2, 1, 0];
+    currentIndex = 0;
+    this.currentSnake.forEach((index) => squares[index].classList.add("snake"));
+    this.interval = setInterval(this.moveOutcome(squares), this.intervalTime);
+    this.interval = setInterval(this.updateTimer(), this.intervalTime)
+    this.score = 0;
+    alert("You need to get 3 score");
+  }
+
+  gameBoard() {
+    for (let i = 0; i < 100; i++) {
+      let div = document.createElement("div");
+      grid.appendChild(div);
     }
-    else{
-        moveSnake(squares)
+  }
+
+  randomApple(squares) {
+    do {
+      this.appleIndex = Math.floor(Math.random() * squares.length);
+    } while (squares[this.appleIndex].classList.contains("snake"));
+    squares[this.appleIndex].classList.add("apple");
+  }
+
+  eatApple(squares, tail) {
+    if (squares[this.currentSnake[0]].classList.contains("apple")) {
+      squares[this.currentSnake[0]].classList.remove("apple");
+      squares[tail].classList.add("snake");
+      this.currentSnake.push(tail);
+      this.randomApple(squares);
+      this.score++;
+      scoreDisplay.textContent = this.score;
+      clearInterval(this.interval);
+      this.interval = setInterval(this.moveOutcome.bind(this, squares), this.intervalTime);
     }
-}
-function checkForHits(squares) {
+  }
+
+  moveSnake(squares) {
+    let tail = this.currentSnake.pop();
+    squares[tail].classList.remove("snake");
+    this.currentSnake.unshift(this.currentSnake[0] + this.direction);
+    squares[this.currentSnake[0]].classList.add("snake");
+    this.eatApple(squares, tail);
+  }
+
+  moveOutcome(squares) {
+    if (this.checkForHits(squares)) {
+      alert("You hit something");
+      return clearInterval(this.interval);
+    } else if (this.score === 3) {
+      this.nextLevel();
+    } else {
+      this.moveSnake(squares);
+    }
+  }
+
+  checkForHits(squares) {
     if (
-      (currentSnake[0] + width >= width * width && direction === width) ||
-      (currentSnake[0] % width === width - 1 && direction === 1) ||
-      (currentSnake[0] % width === 0 && direction === -1) ||
-      (currentSnake[0] - width <= 0 && direction === -width) ||
-      squares[currentSnake[0] + direction].classList.contains("snake")
+      (this.currentSnake[0] + width >= width * width && this.direction === width) ||
+      (this.currentSnake[0] % width === width - 1 && this.direction === 1) ||
+      (this.currentSnake[0] % width === 0 && this.direction === -1) ||
+      (this.currentSnake[0] - width <= 0 && this.direction === -width) ||
+      squares[this.currentSnake[0] + this.direction].classList.contains("snake")
     ) {
       return true;
     } else {
       return false;
     }
   }
-  function control(e) {
+
+  control(e) {
     if (e.keyCode === 39) {
-      direction = 1;
+      this.direction = 1;
     } else if (e.keyCode === 38) {
-      direction = -width;
+      this.direction = -width;
     } else if (e.keyCode === 37) {
-      direction = -1;
+      this.direction = -1;
     } else if (e.keyCode === 40) {
-      direction = +width;
+      this.direction = +width;
     }
   }
- timer = document.getElementById("timer")
- const start = new Date()
- start.setSeconds(start.getSeconds() + 60)
- function updateTimer(){
-    const currentTime = new Date()
-    const timeDiff = new Date(start - currentTime)
-    const minutes = timeDiff.getMinutes();
-    const seconds = timeDiff.getSeconds()
-    intervalTime = 1000;
-    timer.innerText = `${minutes.toString().padStart(2, "0")} : ${seconds.toString().padStart(2, "0")}`
-    if (timeDiff<=0) {
-        clearInterval(interval)
-        retry()
-    }
- }
- updateTimer()
- interval = setInterval(updateTimer, intervalTime)
 
-function retry(){
-    let retry = confirm("u need to get 3 score. Try again")
+
+  retry() {
+    let retry = confirm("You need to get 3 score. Try again");
     if (retry) {
-        startGame()
-        gameBoard()
-    }     
-}
-function nextLevel(){
-  let nextLevel = confirm("U won, wanna go to the next level?")
-  if (nextLevel) {
-    start.setSeconds(start.getSeconds() + 50)
-    startGame()
-    gameBoard()
-    score = 0
-  } else {
-    alert("Okay maybe next time")
+      this.startGame();
+      this.gameBoard();
+    }
+  }
+
+  clearBoard() {
+    let squares = document.querySelectorAll(".grid div");
+
+    this.currentSnake.forEach(i => {
+      squares[i].classList.remove("snake");
+    });
+    squares[this.appleIndex].classList.remove("apple");
+    this.appleIndex = -1;
+    clearInterval(this.interval);
+  }
+
+  nextLevel() {
+    let nextLevel = confirm("You won, wanna go to the next level?");
+    if (nextLevel) {
+      this.clearBoard();
+      this.startGame();
+    } else {
+      alert("Okay maybe next time");
+    }
   }
 }
