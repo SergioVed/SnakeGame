@@ -5,6 +5,8 @@ class Snake {
 }
 
 let grid = document.querySelector(".grid");
+let gridBoard = document.querySelector(".gridBoard")
+let Edge = document.querySelector(".Edge")
 let scoreDisplay = document.querySelector(".scoreDisplay");
 let width = 10;
 let currentIndex = 0;
@@ -104,12 +106,9 @@ class CurrentGame {
   }
 
   checkForHits(squares) {
+    // let squares = document.querySelectorAll(".gridBoard Edge");
     if (
-      (this.currentSnake[0] + width >= width * width && this.direction === width) ||
-      (this.currentSnake[0] % width === width - 1 && this.direction === 1) ||
-      (this.currentSnake[0] % width === 0 && this.direction === -1) ||
-      (this.currentSnake[0] - width <= 0 && this.direction === -width) ||
-      squares[this.currentSnake[0] + this.direction].classList.contains("snake")
+      squares[this.currentSnake[0]].classList.contains("Edge") || squares[this.currentSnake[0] + this.direction].classList.contains("snake")
     ) {
       return true;
     } else {

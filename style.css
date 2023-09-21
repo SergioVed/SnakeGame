@@ -6,6 +6,8 @@ body {
 }
 
 .grid {
+  grid-column-start: 2;
+  grid-row-start: 2;
   height: 200px;
   width: 200px;
   border: 1px solid black;
@@ -15,6 +17,50 @@ body {
 .grid div {
   height: 20px;
   width: 20px;
+}
+.grid .boardDiv {
+  height: 20px;
+  width: 20px;
+}
+
+.gridBoard {
+  height: 240px;
+  width: 240px;
+  display: grid;
+  grid-template-columns: 20px 200px 20px;
+  grid-template-rows: 20px 200px 20px;
+}
+
+.Edge {
+  background-color: greenyellow;
+}
+
+.top {
+  width: 220px;
+  height: 20px;
+  grid-column-start: 1;
+  grid-row-start: 1;
+}
+
+.bottom {
+  width: 220px;
+  height: 20px;
+  grid-column-start: 2;
+  grid-row-start: 3;
+}
+
+.left {
+  height: 220px;
+  width: 20px;
+  grid-column-start: 1;
+  grid-row-start: 2;
+}
+
+.right {
+  height: 220px;
+  width: 20px;
+  grid-column-start: 3;
+  grid-row-start: 1;
 }
 
 .info {
