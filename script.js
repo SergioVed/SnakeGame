@@ -3,10 +3,12 @@ class Snake {
     this.currentSnake = [2, 1, 0];
   }
 }
-
-let grid = document.querySelector(".grid");
 let gridBoard = document.querySelector(".gridBoard")
-let Edge = document.querySelector(".Edge")
+let grid = document.querySelector(".grid");
+let up = document.querySelector(".top");
+let bottom = document.querySelector(".bottom");
+let right = document.querySelector(".right");
+let left = document.querySelector(".left");
 let scoreDisplay = document.querySelector(".scoreDisplay");
 let width = 10;
 let currentIndex = 0;
@@ -15,6 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let snakeGame = new CurrentGame();
   document.addEventListener("keyup", snakeGame.control.bind(snakeGame));
   snakeGame.gameBoard();
+  snakeGame.gameEdgeBoard()
   snakeGame.startGame();
 });
 
@@ -67,7 +70,28 @@ class CurrentGame {
       grid.appendChild(div);
     }
   }
-
+  gameEdgeBoard() {
+    for (let i = 0; i < 11; i++) {
+      let edge = document.createElement("div");
+      edge.classList.add("edge")
+      up.appendChild(edge);
+    }
+    for (let i = 0; i < 11; i++) {
+      let edge = document.createElement("div");
+      edge.classList.add("edge")
+      bottom.appendChild(edge);
+    }
+    for (let i = 0; i < 11; i++) {
+      let edge = document.createElement("div");
+      edge.classList.add("edge")
+      left.appendChild(edge);
+    }
+    for (let i = 0; i < 11; i++) {
+      let edge = document.createElement("div");
+      edge.classList.add("edge")
+      right.appendChild(edge);
+    }
+  }
   randomApple(squares) {
     do {
       this.appleIndex = Math.floor(Math.random() * squares.length);
@@ -97,6 +121,7 @@ class CurrentGame {
   moveOutcome(squares) {
     if (this.checkForHits(squares)) {
       alert("You hit something");
+      this.retry();
       return clearInterval(this.interval);
     } else if (this.score === 3) {
       this.nextLevel();
@@ -108,7 +133,7 @@ class CurrentGame {
   checkForHits(squares) {
     // let squares = document.querySelectorAll(".gridBoard Edge");
     if (
-      squares[this.currentSnake[0]].classList.contains("Edge") || squares[this.currentSnake[0] + this.direction].classList.contains("snake")
+      squares[this.currentSnake[0] + this.direction].classList.contains("snake") || squares[this.currentSnake[0]].classList.contains("edge")
     ) {
       return true;
     } else {

@@ -30,26 +30,31 @@ body {
   grid-template-columns: 20px 200px 20px;
   grid-template-rows: 20px 200px 20px;
 }
-
-.Edge {
-  background-color: greenyellow;
+.gridBoard .edge {
+  background-color: yellowgreen;
+  width: 20px;
+  height: 20px;
 }
 
 .top {
-  width: 220px;
-  height: 20px;
+  display: flex;
   grid-column-start: 1;
   grid-row-start: 1;
+  width: 220px;
+  height: 20px;
 }
 
 .bottom {
-  width: 220px;
-  height: 20px;
+  display: flex;
   grid-column-start: 2;
   grid-row-start: 3;
+  width: 220px;
+  height: 20px;
 }
 
 .left {
+  display: flex;
+  flex-direction: column;
   height: 220px;
   width: 20px;
   grid-column-start: 1;
@@ -57,6 +62,8 @@ body {
 }
 
 .right {
+  display: flex;
+  flex-direction: column;
   height: 220px;
   width: 20px;
   grid-column-start: 3;
