@@ -95,6 +95,7 @@ class CurrentGame {
   moveOutcome(squares) {
     if (this.checkForHits(squares)) {
       alert("You hit something");
+      this.retry()
       return clearInterval(this.interval);
     } else if (this.score === 3) {
       this.nextLevel();
@@ -153,7 +154,6 @@ class CurrentGame {
     let nextLevel = confirm("You won, wanna go to the next level?");
     if (nextLevel) {
       clearInterval(this.interval)
-      start.setSeconds(start.getSeconds() + 50)
       this.clearBoard();
       this.startGame();
       this.score = 0;
