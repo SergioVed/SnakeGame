@@ -8,7 +8,7 @@ let grid = document.querySelector(".grid");
 let scoreDisplay = document.querySelector(".scoreDisplay");
 let width = 10;
 let currentIndex = 0;
-let interval = 0
+let interval = 0;
 document.addEventListener("DOMContentLoaded", function () {
   let snakeGame = new CurrentGame();
   document.addEventListener("keyup", snakeGame.control.bind(snakeGame));
@@ -27,8 +27,8 @@ class CurrentGame {
     this.intervalTime = 0;
     this.interval = 0;
     this.appleIndex = 0;
+    this.top = document.querySelector(".top")
   }
-
   updateTimer(){
     const currentTime = new Date()
     const timeDiff = new Date(start - currentTime)
@@ -57,6 +57,23 @@ class CurrentGame {
     }, this.intervalTime)
     this.score = 0;
     alert("You need to get 3 score");
+    let top = document.querySelector(".top")
+    let bottom = document.querySelector(".bottom")
+    let left = document.querySelector(".left")
+    let right = document.querySelector(".right")
+
+    top.addEventListener('click', () => {
+      this.direction = -width;
+    })
+    bottom.addEventListener('click', () => {
+      this.direction = width;
+    })
+    left.addEventListener('click', () => {
+      this.direction = -1;
+    })
+    right.addEventListener('click', () => {
+      this.direction = 1;
+    })
   }
 
   gameBoard() {
@@ -117,9 +134,8 @@ class CurrentGame {
       return false;
     }
   }
-
   control(e) {
-    if (e.keyCode === 39) {
+    if (e.keyCode === 39){
       this.direction = 1;
     } else if (e.keyCode === 38) {
       this.direction = -width;
@@ -129,7 +145,7 @@ class CurrentGame {
       this.direction = +width;
     }
   }
-
+  
   retry() {
     let retry = confirm("You need to get 3 score. Try again");
     if (retry) {
