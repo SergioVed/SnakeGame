@@ -27,7 +27,6 @@ class CurrentGame {
     this.intervalTime = 0;
     this.interval = 0;
     this.appleIndex = 0;
-    this.top = document.querySelector(".top")
   }
   updateTimer(){
     const currentTime = new Date()
@@ -145,7 +144,8 @@ class CurrentGame {
       this.direction = +width;
     }
   }
-  
+
+
   retry() {
     let retry = confirm("You need to get 3 score. Try again");
     if (retry) {
